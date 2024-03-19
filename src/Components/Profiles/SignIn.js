@@ -1,26 +1,28 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 
-const SignUpPage = ({ firebase }) => {
+const LogInForm = ({ firebase }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
+  const handleLogIn = async (event) => {
+    event.preventDefault();
     try {
-      await firebase.auth().createUserWithEmailAndPassword(email, password);
-      // Redirect the user to the dashboard or another page after successful sign-up
-      window.location.href = "/dashboard";
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      // Redirect the user to the dashboard or another page after successful login
+      window.location.href = "/dashboard"; // Redirect using window.location.href
     } catch (error) {
-      console.error("Error signing up:", error.message);
-      // Handle sign-up errors (e.g., display error messages to the user)
+      console.error("Error logging in:", error.message);
+      // Handle login errors (e.g., display error messages to the user)
     }
+    setEmail("");
+    setPassword("");
   };
 
   return (
     <div className="container mt-5">
-      <h2>Sign Up</h2>
-      <Form onSubmit={handleSignUp}>
+      <h2>Log In</h2>
+      <Form onSubmit={handleLogIn}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -44,11 +46,11 @@ const SignUpPage = ({ firebase }) => {
         </Form.Group>
 
         <Button variant="primary" type="submit">
-          Sign Up
+          Log In
         </Button>
       </Form>
     </div>
   );
 };
 
-export default SignUpPage;
+export default LogInForm;
