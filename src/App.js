@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+/*import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app"; // Import only the necessary Firebase modules
 import "firebase/compat/auth"; // Import Firebase Authentication module
 
@@ -18,31 +18,14 @@ const firebaseConfig = {
   measurementId: "G-77E9SZ69CK",
 };
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)*/
+import Home from "./Components/Pages/Home";
 
 const App = () => {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
-  useEffect(() => {
-    // Listener for Firebase authentication state changes
-    const unregisterAuthObserver = firebase
-      .auth()
-      .onAuthStateChanged((user) => {
-        setIsSignedIn(!!user); // Set isSignedIn to true if user is signed in, false otherwise
-      });
-
-    // Cleanup function to unsubscribe from the auth observer
-    return () => unregisterAuthObserver();
-  }, []);
-
   return (
-    <div>
-      {isSignedIn ? (
-        <ProfilePage firebase={firebase} />
-      ) : (
-        <Home firebase={firebase} />
-      )}
-    </div>
+    <>
+      <Home />
+    </>
   );
 };
 
