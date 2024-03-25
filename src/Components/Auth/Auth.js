@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 
-const Auth = ({ setIdToken }) => {
+const Auth = ({ handleLogin }) => {
   const [SIGNUP, signUpHandler] = useState(false);
   const Email = useRef();
   const Password = useRef();
@@ -46,7 +46,7 @@ const Auth = ({ setIdToken }) => {
       const data = await response.json();
 
       console.log(data);
-      setIdToken(data.idToken);
+      handleLogin(data.idToken);
     };
 
     signUpHandler();
