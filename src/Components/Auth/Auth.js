@@ -21,10 +21,10 @@ const Auth = ({ handleLogin }) => {
     if (!SIGNUP) {
       console.log("This was signup brother");
       url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBvfI765RzQerwARKTJwziACEhKtAt03Cg";
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyATlRMmgZhx_d86BZAvGHprgCUO2Nxo6ck";
     } else {
       console.log("Sign in brother");
-      url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBvfI765RzQerwARKTJwziACEhKtAt03Cg`;
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyATlRMmgZhx_d86BZAvGHprgCUO2Nxo6ck`;
     }
 
     const signUpHandler = async () => {
