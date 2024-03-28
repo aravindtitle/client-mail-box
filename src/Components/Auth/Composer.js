@@ -6,6 +6,30 @@ const EmailComposer = () => {
   const subject = useRef();
   const body = useRef();
   const [showComposeForm, setShowComposeForm] = useState(false);
+  const [showInbox, setShowInbox] = useState(true); // New state to control Inbox visibility
+  const UID = localStorage.getItem("UID");
+
+  const markEmailAsRead = async (emailId) => {
+    // Update the email status as read in the Firebase database
+    try {
+      const response = await fetch(
+        `https://login-94bb8-default-rtdb.firebaseio.com/user/${UID}/email/${emailId}.json`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ read: true }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to mark email as read");
+      }
+      console.log("Email marked as read successfully!");
+    } catch (error) {
+      console.error("Error marking email as read:", error);
+    }
+  };
 
   const sendHandler = async (e) => {
     e.preventDefault();
@@ -13,13 +37,12 @@ const EmailComposer = () => {
       To: email.current.value,
       subject: subject.current.value,
       message: body.current.value,
+      read: false, // Assuming the sent email is unread by default
     };
-    console.log(composer);
 
     try {
-      const userId = "";
       const response = await fetch(
-        `https://login-94bb8-default-rtdb.firebaseio.com/users/${userId}/email.json`,
+        `https://login-94bb8-default-rtdb.firebaseio.com/user/${UID}/email.json`,
         {
           method: "POST",
           headers: {
@@ -31,11 +54,9 @@ const EmailComposer = () => {
 
       if (response.ok) {
         console.log("Email sent successfully!");
-        // Optionally, you can reset the form here if needed
         email.current.value = "";
         subject.current.value = "";
         body.current.value = "";
-        setShowComposeForm(false); // Hide the compose form after sending email
       } else {
         console.error("Failed to send email.");
       }
@@ -44,13 +65,22 @@ const EmailComposer = () => {
     }
   };
 
+  const toggleInboxVisibility = () => {
+    setShowInbox((prevState) => !prevState);
+    setShowComposeForm(false); // Ensure the compose form is closed when toggling the Inbox visibility
+  };
+
   return (
     <div>
-      {!showComposeForm ? (
-        <button variant="primary" onClick={() => setShowComposeForm(true)}>
-          Compose
+      <div>
+        <button
+          variant="primary"
+          onClick={() => setShowComposeForm((prevState) => !prevState)} // Toggle the compose form visibility
+        >
+          {showComposeForm ? "Close Compose" : "Compose"}
         </button>
-      ) : (
+      </div>
+      {showComposeForm && ( // Render the compose form only if showComposeForm is true
         <form onSubmit={sendHandler}>
           <label>To:</label>
           <input type="email" name="email" ref={email} required />
@@ -65,7 +95,9 @@ const EmailComposer = () => {
         </form>
       )}
       <div>
-        <Inbox />
+        {showInbox && ( // Render the inbox only if showInbox is true
+          <Inbox userId={UID} markEmailAsRead={markEmailAsRead} />
+        )}
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ const Home = () => {
   }, []);
 
   const handleLogin = (token, userId) => {
-    console.log("User ID:", userId); // Check if userId is received correctly
+    // Check if userId is received correctly
     setIdToken(token);
     setSenderId(userId); // Set the senderId state after authentication
   };
@@ -23,7 +23,7 @@ const Home = () => {
       {idtoken ? (
         <>
           <Welcome />
-          <EmailComposer senderId={senderId} /> {/* Pass senderId as a prop */}
+          <EmailComposer UID={senderId} /> {/* Pass senderId as a prop */}
         </>
       ) : (
         <Auth handleLogin={handleLogin} />

@@ -2,14 +2,14 @@ import firebase from "firebase/compat/app"; // Import only the necessary Firebas
 import "firebase/compat/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBvfI765RzQerwARKTJwziACEhKtAt03Cg",
-  authDomain: "expenses-tracker-2f825.firebaseapp.com",
-  databaseURL: "https://expenses-tracker-2f825-default-rtdb.firebaseio.com",
-  projectId: "expenses-tracker-2f825",
-  storageBucket: "expenses-tracker-2f825.appspot.com",
-  messagingSenderId: "241432493087",
-  appId: "1:241432493087:web:9e45793d4e2586c131a92a",
-  measurementId: "G-77E9SZ69CK",
+  apiKey: "AIzaSyATlRMmgZhx_d86BZAvGHprgCUO2Nxo6ck",
+  authDomain: "login-94bb8.firebaseapp.com",
+  databaseURL: "https://login-94bb8-default-rtdb.firebaseio.com",
+  projectId: "login-94bb8",
+  storageBucket: "login-94bb8.appspot.com",
+  messagingSenderId: "176717676173",
+  appId: "1:176717676173:web:afe0dc37f43c55bddc6cc4",
+  measurementId: "G-RHWS9Z0GTD",
 };
 
 // Check if Firebase is already initialized to prevent re-initialization
