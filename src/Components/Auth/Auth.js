@@ -38,6 +38,7 @@ const Auth = ({ handleLogin }) => {
       throw new Error("Signup was not successful");
     }
     const data = await response.json();
+    localStorage.setItem("UID", data.email);
 
     handleLogin(data.idToken);
   }

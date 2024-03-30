@@ -3,6 +3,7 @@ import Header from "../Header/Header";
 import Auth from "../Auth/Auth";
 import Welcome from "../Header/Welcome";
 import EmailComposer from "../Auth/Composer";
+import Sent from "../Auth/Sent";
 
 const Home = () => {
   const [idtoken, setIdToken] = useState("");
@@ -19,7 +20,7 @@ const Home = () => {
   };
 
   return (
-    <>
+    <div style={{ backgroundColor: "skyblue" }}>
       {idtoken ? (
         <>
           <Welcome />
@@ -28,7 +29,7 @@ const Home = () => {
       ) : (
         <Auth handleLogin={handleLogin} />
       )}
-    </>
+    </div>
   );
 };
 
