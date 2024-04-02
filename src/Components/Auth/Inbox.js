@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 
 const inboxReducer = (state, action) => {
@@ -26,53 +26,60 @@ const inboxReducer = (state, action) => {
 };
 
 const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
+  const UID = localStorage.getItem("UID");
   const [state, dispatch] = useReducer(inboxReducer, {
     emails: [],
     selectedEmail: null,
   });
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    const storedEmails = JSON.parse(localStorage.getItem("emails"));
-    if (storedEmails) {
-      dispatch({ type: "FETCH_EMAILS", payload: storedEmails });
-    }
+    // Fetch emails initially
+    fetchEmails();
+    // Start polling for new emails
+    const interval = setInterval(fetchEmails, 2000);
+    // Cleanup function to stop polling when component unmounts
+    return () => clearInterval(interval);
   }, []);
 
-  const inboxHandler = async (event) => {
-    event.preventDefault();
+  const fetchEmails = async () => {
+    console.log("im going to school");
     try {
       const response = await fetch(
-        `https://login-94bb8-default-rtdb.firebaseio.com/user/A/email.json`
+        `https://login-94bb8-default-rtdb.firebaseio.com/email.json`
       );
-
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         if (data) {
-          dispatch({ type: "FETCH_EMAILS", payload: Object.values(data) });
-          localStorage.setItem("emails", JSON.stringify(Object.values(data)));
+          var received = Object.values(data).filter((obj) => obj.To === UID);
+          console.log(received);
+          setData(received);
+          //console.log(data);
+
+          dispatch({ type: "FETCH_EMAILS", payload: received });
         } else {
           console.error("No email data available.");
         }
       } else {
-        console.error("Failed to retrieve email data.");
+        console.error(
+          "Failed to fetch inbox messages. Response status:",
+          response.status
+        );
       }
     } catch (error) {
-      console.error("Error retrieving email data:", error);
+      console.error("Error fetching inbox messages:", error);
     }
   };
 
   const handleEmailClick = async (email) => {
     // Mark the email as read when clicked
-    email.read = true; // Assuming you have a 'read' property in each email object
-    // Update the read status in the backend
     try {
-      await markEmailAsRead(email.id); // Assuming email.id is the unique identifier for each email
-      // Update the local state to reflect the change
+      await markEmailAsRead(email.id);
       const updatedEmails = state.emails.map((e) =>
         e.id === email.id ? { ...e, read: true } : e
       );
       dispatch({ type: "FETCH_EMAILS", payload: updatedEmails });
-      // Set the selected email
       dispatch({ type: "SELECT_EMAIL", payload: email });
     } catch (error) {
       console.error("Error marking email as read:", error);
@@ -83,7 +90,7 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
     try {
       // Call your backend API to delete the email
       const response = await fetch(
-        `https://login-94bb8-default-rtdb.firebaseio.com/user/A/email/${emailId}.json`,
+        `https://login-94bb8-default-rtdb.firebaseio.com/email.json`,
         {
           method: "DELETE",
           headers: {
@@ -99,7 +106,6 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
         dispatch({ type: "FETCH_EMAILS", payload: updatedEmails });
         // Clear the selected email if it was deleted
         dispatch({ type: "SELECT_EMAIL", payload: null });
-        // Optionally, you can remove the email from local storage as well
       } else {
         console.error("Failed to delete email.");
       }
@@ -160,37 +166,42 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
           </div>
         ) : (
           <div>
-            <Button onClick={inboxHandler}>
+            <Button onClick={fetchEmails}>
               Inbox {countUnreadMessages() > 0 && `(${countUnreadMessages()})`}
             </Button>
-            {state.emails.map((email) => (
-              <Card
-                key={email.id}
-                style={{
-                  margin: "16px",
-                  cursor: "pointer",
-                  border: "1px solid blue",
-                  borderRadius: "5px",
-                  backgroundColor:
-                    state.selectedEmail === email ? "#f0f0f0" : "inherit",
-                }}
-                onClick={() => handleEmailClick(email)}
-              >
-                <Card.Body>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div>
-                      {renderBlueDot(email)}
-                      <Card.Title>{email.subject}</Card.Title>
+            <ul>
+              {state.emails.map((email) => (
+                <li
+                  key={email.id}
+                  style={{
+                    margin: "16px",
+                    cursor: "pointer",
+                    border: "1px solid blue",
+                    borderRadius: "5px",
+                    backgroundColor:
+                      state.selectedEmail === email ? "#f0f0f0" : "inherit",
+                  }}
+                  onClick={() => handleEmailClick(email)}
+                >
+                  <Card.Body>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>
+                        {renderBlueDot(email)}
+                        <Card.Title>{email.subject}</Card.Title>
+                      </div>
+                      <Button onClick={() => handleDeleteEmail(email.id)}>
+                        Delete
+                      </Button>
                     </div>
-                    <Button onClick={() => handleDeleteEmail(email.id)}>
-                      Delete
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            ))}
+                  </Card.Body>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>

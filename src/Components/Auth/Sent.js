@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 
-const Sent = (A) => {
+const Sent = () => {
+  // Destructure props object to access A (UID)
   const [sentMessages, setSentMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
+  const UID = localStorage.getItem("UID");
 
   useEffect(() => {
     fetchSentMessages();
@@ -12,18 +14,21 @@ const Sent = (A) => {
   const fetchSentMessages = async () => {
     try {
       const response = await fetch(
-        "https://login-94bb8-default-rtdb.firebaseio.com/users/A/email.json"
+        `https://login-94bb8-default-rtdb.firebaseio.com/email.json`
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        console.log("Response data:", data); // Log the response data
         // Filter sent messages sent by the logged-in user
-        const sent = Object.values(data).filter(
-          (email) => email.folder === "Sent" && email.From === A
-        );
+        var sent = Object.values(data).filter((obj) => obj.from === UID);
+        console.log(sent);
+
         setSentMessages(sent);
       } else {
-        console.error("Failed to fetch sent messages.");
+        console.error(
+          "Failed to fetch sent messages. Response status:",
+          response.status
+        );
       }
     } catch (error) {
       console.error("Error fetching sent messages:", error);

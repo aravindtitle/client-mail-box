@@ -10,12 +10,20 @@ const EmailComposer = () => {
   const [showInbox, setShowInbox] = useState(true); // New state to control Inbox visibility
   const [showSent, setShowSent] = useState(false); // New state to control Sent visibility
   const UID = localStorage.getItem("UID");
-  let A = UID.replace(/[.@]/g, "");
+  if (!UID) {
+    // Handle the case where UID is null or undefined
+    // For example, you can redirect the user to the login page
+    // or display an error message
+    return <div>Please log in to access this page.</div>;
+  }
+
+  const A = UID.replace(/[.@]/g, "");
+
   const markEmailAsRead = async (emailId) => {
     // Update the email status as read in the Firebase database
     try {
       const response = await fetch(
-        `https://login-94bb8-default-rtdb.firebaseio.com/users/A/email.json`,
+        `https://login-94bb8-default-rtdb.firebaseio.com/email.json`,
         {
           method: "PATCH",
           headers: {
@@ -36,16 +44,16 @@ const EmailComposer = () => {
   const sendHandler = async (e) => {
     e.preventDefault();
     const composer = {
+      from: UID,
       To: email.current.value,
       subject: subject.current.value,
       message: body.current.value,
       read: false, // Assuming the sent email is unread by default
-      folder: "Sent", // Assign the folder as "Sent"
     };
 
     try {
       const response = await fetch(
-        `https://login-94bb8-default-rtdb.firebaseio.com/users/A/email.json`,
+        `https://login-94bb8-default-rtdb.firebaseio.com/email.json`,
         {
           method: "POST",
           headers: {
@@ -132,7 +140,7 @@ const EmailComposer = () => {
           </form>
         )}
         {showInbox && <Inbox userId={UID} markEmailAsRead={markEmailAsRead} />}
-        {showSent && <Sent A={A} />}{" "}
+        {showSent && <Sent UID={UID} />}{" "}
         {/* Show the Sent component if showSent is true */}
       </div>
     </div>

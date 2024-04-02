@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import Logout from "./Logout";
 
 const Auth = ({ handleLogin }) => {
   const [SIGNUP, signUpHandler] = useState(false);
@@ -39,7 +40,7 @@ const Auth = ({ handleLogin }) => {
     }
     const data = await response.json();
     localStorage.setItem("UID", data.email);
-
+    localStorage.setItem("idToken", data.idToken);
     handleLogin(data.idToken);
   }
 
