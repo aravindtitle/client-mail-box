@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
+import useFetch from "../../Useeffect/CustomHook";
 
 const Sent = () => {
   // Destructure props object to access A (UID)
   const [sentMessages, setSentMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const UID = localStorage.getItem("UID");
+  const { data, loading, showName, setShowName } = useFetch(
+    "https://login-94bb8-default-rtdb.firebaseio.com/email.json"
+  );
+  console.log(data);
 
-  useEffect(() => {
+  /*useEffect(() => {
     fetchSentMessages();
   }, []);
 
@@ -33,7 +38,7 @@ const Sent = () => {
     } catch (error) {
       console.error("Error fetching sent messages:", error);
     }
-  };
+  };*/
 
   const renderMessageDetails = (message) => {
     return (
@@ -62,7 +67,7 @@ const Sent = () => {
           {renderMessageDetails(selectedMessage)}
         </div>
       ) : (
-        sentMessages.map((message) => (
+        data.map((message) => (
           <Card key={message.id} style={{ marginBottom: "10px" }}>
             <Card.Body>
               <Card.Title>{message.subject}</Card.Title>

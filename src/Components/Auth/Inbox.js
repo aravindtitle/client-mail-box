@@ -37,9 +37,6 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
     // Fetch emails initially
     fetchEmails();
     // Start polling for new emails
-    const interval = setInterval(fetchEmails, 2000);
-    // Cleanup function to stop polling when component unmounts
-    return () => clearInterval(interval);
   }, []);
 
   const fetchEmails = async () => {
@@ -152,7 +149,9 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <div>
-                    <h3>{state.selectedEmail.subject}</h3>
+                    <h3>From:{state.selectedEmail.from}</h3>
+                    <h4>Subject:{state.selectedEmail.subject}</h4>
+                    <h4>Message:</h4>
                     <p>{state.selectedEmail.message}</p>
                   </div>
                   <Button

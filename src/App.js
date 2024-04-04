@@ -20,6 +20,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)*/
 import Home from "./Components/Pages/Home";
+//import MyComponent from "./Components/MyComponent";
 
 const App = () => {
   return (

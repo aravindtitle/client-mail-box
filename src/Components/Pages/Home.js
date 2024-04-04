@@ -4,6 +4,8 @@ import Logout from "../Auth/Logout";
 import Auth from "../Auth/Auth";
 import Welcome from "../Header/Welcome";
 import EmailComposer from "../Auth/Composer";
+import MyComponent from "../MyComponent";
+import YourComponent from "../YourComponent";
 
 const Home = () => {
   const [idtoken, setIdToken] = useState("");
