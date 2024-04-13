@@ -7,45 +7,19 @@ const Sent = () => {
   const [sentMessages, setSentMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const UID = localStorage.getItem("UID");
-  const { data, loading, showName, setShowName } = useFetch(
-    "https://login-94bb8-default-rtdb.firebaseio.com/email.json"
+  const { data, loading } = useFetch(
+    "https://login-94bb8-default-rtdb.firebaseio.com/email.json",
+    "Sent"
   );
-  console.log(data);
 
-  /*useEffect(() => {
-    fetchSentMessages();
-  }, []);
+  const renderMessageDetails = ({ key, value }) => {
+    //we will seind request to firebase using key and get object from firebase
 
-  const fetchSentMessages = async () => {
-    try {
-      const response = await fetch(
-        `https://login-94bb8-default-rtdb.firebaseio.com/email.json`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Response data:", data); // Log the response data
-        // Filter sent messages sent by the logged-in user
-        var sent = Object.values(data).filter((obj) => obj.from === UID);
-        console.log(sent);
-
-        setSentMessages(sent);
-      } else {
-        console.error(
-          "Failed to fetch sent messages. Response status:",
-          response.status
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching sent messages:", error);
-    }
-  };*/
-
-  const renderMessageDetails = (message) => {
     return (
       <div>
-        <p>To: {message.To}</p>
-        <p>Subject: {message.subject}</p>
-        <p>Message: {message.message}</p>
+        <p>To: {value.To}</p>
+        <p>Subject: {value.subject}</p>
+        <p>Message: {value.message}</p>
       </div>
     );
   };
@@ -68,9 +42,9 @@ const Sent = () => {
         </div>
       ) : (
         data.map((message) => (
-          <Card key={message.id} style={{ marginBottom: "10px" }}>
+          <Card key={message.key} style={{ marginBottom: "10px" }}>
             <Card.Body>
-              <Card.Title>{message.subject}</Card.Title>
+              <Card.Title>{message.value.subject}</Card.Title>
 
               <Button onClick={() => handleViewDetails(message)}>
                 View Details

@@ -3,12 +3,11 @@ import { Button } from "react-bootstrap";
 
 const Logout = ({ handleLogout }) => {
   const logoutHandler = () => {
-    // Call the handleLogout function passed from the parent component
     handleLogout();
   };
 
   return (
-    <div>
+    <div style={{ position: "absolute", top: "10px", right: "10px" }}>
       <Button onClick={logoutHandler}>Log Out</Button>
     </div>
   );

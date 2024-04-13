@@ -4,26 +4,21 @@ import Logout from "../Auth/Logout";
 import Auth from "../Auth/Auth";
 import Welcome from "../Header/Welcome";
 import EmailComposer from "../Auth/Composer";
-import MyComponent from "../MyComponent";
-import YourComponent from "../YourComponent";
 
-const Home = () => {
+const Home = ({ handlerTiggle }) => {
   const [idtoken, setIdToken] = useState("");
-  const [senderId, setSenderId] = useState("");
 
   useEffect(() => {
     let A = localStorage.getItem("idToken");
     handleLogin(A);
   }, []);
 
-  const handleLogin = (token, userId) => {
+  const handleLogin = (token) => {
     setIdToken(token);
-    setSenderId(userId);
   };
 
   const handleLogout = () => {
-    setIdToken(""); // Clear the token
-    setSenderId(""); // Clear the senderId
+    setIdToken("");
   };
 
   return (
@@ -36,7 +31,7 @@ const Home = () => {
                 {idtoken ? (
                   <>
                     <Welcome />
-                    <EmailComposer UID={senderId} />
+                    <EmailComposer handlerTiggle={handlerTiggle} />
                     <Logout handleLogout={handleLogout} />
                   </>
                 ) : (

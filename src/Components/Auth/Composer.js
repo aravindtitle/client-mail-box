@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Form } from "react-bootstrap";
 import Inbox from "./Inbox";
-import Sent from "./Sent"; // Import the Sent component
+import Sent from "./Sent";
 
 const EmailComposer = () => {
   const email = useRef();
@@ -10,45 +11,18 @@ const EmailComposer = () => {
   const [showInbox, setShowInbox] = useState(true); // New state to control Inbox visibility
   const [showSent, setShowSent] = useState(false); // New state to control Sent visibility
   const UID = localStorage.getItem("UID");
-  if (!UID) {
-    // Handle the case where UID is null or undefined
-    // For example, you can redirect the user to the login page
-    // or display an error message
-    return <div>Please log in to access this page.</div>;
-  }
 
-  const A = UID.replace(/[.@]/g, "");
-
-  const markEmailAsRead = async (emailId) => {
-    // Update the email status as read in the Firebase database
-    try {
-      const response = await fetch(
-        `https://login-94bb8-default-rtdb.firebaseio.com/email.json`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ body, read: true }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to mark email as read");
-      }
-      console.log("Email marked as read successfully!");
-    } catch (error) {
-      console.error("Error marking email as read:", error);
-    }
-  };
+  var A = UID.replace(/[.@]/g, "");
 
   const sendHandler = async (e) => {
     e.preventDefault();
+
     const composer = {
       from: UID,
       To: email.current.value,
       subject: subject.current.value,
       message: body.current.value,
-      read: false, // Assuming the sent email is unread by default
+      read: false,
     };
 
     try {
@@ -95,53 +69,62 @@ const EmailComposer = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <div style={{ width: "30%", borderRight: "1px solid black" }}>
+    <div style={{ display: "flex", height: "99vh" }}>
+      <div style={{ width: "15%", borderRight: "1px solid black" }}>
         <ul>
           <li>
-            <button onClick={toggleComposeForm}>
-              {showComposeForm ? "Close Compose" : "Open Compose"}
-            </button>
+            <Button onClick={toggleComposeForm}>
+              {showComposeForm ? "Close Composer" : "Open Composer"}
+            </Button>
           </li>
           <li>
-            <button onClick={toggleInbox}>
+            <Button onClick={toggleInbox}>
               {showInbox ? "Close Inbox" : "Open Inbox"}
-            </button>
+            </Button>
           </li>
           <li>
-            <button onClick={toggleSent}>
+            <Button onClick={toggleSent}>
               {showSent ? "Close Sent" : "Open Sent"}
-            </button>
+            </Button>
           </li>
         </ul>
       </div>
-      <div style={{ width: "70%" }}>
+      <div style={{ width: "65%" }}>
         {showComposeForm && (
-          <form onSubmit={sendHandler}>
-            <label>To:</label>
-            <input type="email" name="email" ref={email} required />
+          <Form onSubmit={sendHandler}>
+            <Form.Group controlId="formTo">
+              <Form.Label>To:</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                ref={email}
+                required
+              />
+            </Form.Group>
+            <br></br>
+            <Form.Group controlId="formSubject">
+              <Form.Label>Subject:</Form.Label>
+
+              <Form.Control type="text" placeholder="Subject" ref={subject} />
+            </Form.Group>
+            <br></br>
+            <Form.Group controlId="formBody">
+              <Form.Control
+                as="textarea"
+                rows="40"
+                cols="150"
+                placeholder="Body"
+                ref={body}
+              />
+            </Form.Group>
             <br />
-            <br />
-            <label>Subject:</label>
-            <input type="text" name="subject" ref={subject} />
-            <br />
-            <br />
-            <textarea
-              typeof="text"
-              name="body"
-              ref={body}
-              placeholder="Body"
-              rows="40"
-              cols="150"
-            />
-            <br />
-            <button type="submit">Send</button>
-            <button onClick={toggleComposeForm}>Cancel</button>
-          </form>
+
+            <Button type="submit">Send</Button>
+            <Button onClick={toggleComposeForm}>Cancel</Button>
+          </Form>
         )}
-        {showInbox && <Inbox userId={UID} markEmailAsRead={markEmailAsRead} />}
+        {showInbox && <Inbox userId={UID} />}
         {showSent && <Sent UID={UID} />}{" "}
-        {/* Show the Sent component if showSent is true */}
       </div>
     </div>
   );

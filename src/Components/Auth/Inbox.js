@@ -1,31 +1,19 @@
 import React, { useReducer, useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
+import useFetch from "../../Useeffect/CustomHook";
+import inboxReducer from "../Store/InboxReducer";
 
-const inboxReducer = (state, action) => {
-  switch (action.type) {
-    case "FETCH_EMAILS":
-      return { ...state, emails: action.payload };
-    case "SELECT_EMAIL":
-      return { ...state, selectedEmail: action.payload };
-    case "MARK_EMAIL_AS_READ":
-      return {
-        ...state,
-        emails: state.emails.map((email) =>
-          email.id === action.payload ? { ...email, read: true } : email
-        ),
-      };
-    case "DELETE_EMAIL":
-      return {
-        ...state,
-        emails: state.emails.filter((email) => email.id !== action.payload),
-        selectedEmail: null, // Reset selected email after deletion
-      };
-    default:
-      return state;
-  }
-};
+const Inbox = () => {
+  const {
+    data: Database,
+    loading,
+    setData: setDataBase,
+    setData1,
+  } = useFetch(
+    "https://login-94bb8-default-rtdb.firebaseio.com/email.json",
+    "Inbox"
+  );
 
-const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
   const UID = localStorage.getItem("UID");
   const [state, dispatch] = useReducer(inboxReducer, {
     emails: [],
@@ -33,27 +21,19 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
   });
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    // Fetch emails initially
-    fetchEmails();
-    // Start polling for new emails
-  }, []);
-
   const fetchEmails = async () => {
-    console.log("im going to school");
+    console.log("Fetching emails...");
     try {
       const response = await fetch(
         `https://login-94bb8-default-rtdb.firebaseio.com/email.json`
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        console.log("Received data:", data);
         if (data) {
-          var received = Object.values(data).filter((obj) => obj.To === UID);
-          console.log(received);
+          const received = Object.values(data).filter((obj) => obj.To === UID);
+          console.log("Filtered emails:", received);
           setData(received);
-          //console.log(data);
-
           dispatch({ type: "FETCH_EMAILS", payload: received });
         } else {
           console.error("No email data available.");
@@ -69,40 +49,47 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
     }
   };
 
-  const handleEmailClick = async (email) => {
-    // Mark the email as read when clicked
-    try {
-      await markEmailAsRead(email.id);
-      const updatedEmails = state.emails.map((e) =>
-        e.id === email.id ? { ...e, read: true } : e
-      );
-      dispatch({ type: "FETCH_EMAILS", payload: updatedEmails });
-      dispatch({ type: "SELECT_EMAIL", payload: email });
-    } catch (error) {
-      console.error("Error marking email as read:", error);
+  const handleEmailClick = async (emailId) => {
+    const clickedEmail = Database.find((email) => email.key === emailId);
+
+    if (clickedEmail) {
+      try {
+        await fetch(
+          `https://login-94bb8-default-rtdb.firebaseio.com/email/${clickedEmail.key}.json`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...clickedEmail.value, read: true }),
+          }
+        );
+        setData1((state) => !state);
+        const updatedEmails = state.emails.map((e) =>
+          e.key === clickedEmail.key ? { ...e, read: true } : e
+        );
+        dispatch({ type: "FETCH_EMAILS", payload: updatedEmails });
+        dispatch({ type: "SELECT_EMAIL", payload: clickedEmail.value });
+      } catch (error) {
+        console.error("Error updating email in the backend:", error);
+      }
+    } else {
+      console.error("Clicked email not found in the database.");
     }
   };
 
-  const handleDeleteEmail = async (emailId) => {
+  const handleDeleteEmail = async (key) => {
     try {
-      // Call your backend API to delete the email
       const response = await fetch(
-        `https://login-94bb8-default-rtdb.firebaseio.com/email.json`,
+        `https://login-94bb8-default-rtdb.firebaseio.com/email/${key}.json`,
         {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
       if (response.ok) {
-        // Filter out the deleted email from the state
-        const updatedEmails = state.emails.filter(
-          (email) => email.id !== emailId
-        );
-        dispatch({ type: "FETCH_EMAILS", payload: updatedEmails });
-        // Clear the selected email if it was deleted
-        dispatch({ type: "SELECT_EMAIL", payload: null });
+        const updatedEmails = state.emails.filter((email) => email.key !== key);
+        dispatch({ type: "DELETE_EMAIL", payload: key });
+        setData1((state) => !state);
       } else {
         console.error("Failed to delete email.");
       }
@@ -112,11 +99,22 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
   };
 
   const renderBlueDot = (email) => {
-    return !email.read && <span style={{ color: "blue" }}>&#8226;</span>;
+    return email.read ? null : <span style={{ color: "blue" }}>&#8226;</span>;
   };
 
   const countUnreadMessages = () => {
-    return state.emails.filter((email) => !email.read).length;
+    const unreadEmails = Database.filter((email) => {
+      console.log(email);
+      return !email.value.read;
+    });
+
+    console.log("Unread emails:", unreadEmails);
+
+    return unreadEmails.length;
+  };
+
+  const handleGoBack = () => {
+    dispatch({ type: "SELECT_EMAIL", payload: null });
   };
 
   return (
@@ -131,11 +129,7 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
       >
         {state.selectedEmail ? (
           <div>
-            <Button
-              onClick={() => dispatch({ type: "SELECT_EMAIL", payload: null })}
-            >
-              Go Back
-            </Button>
+            <Button onClick={handleGoBack}>Go Back</Button>
             <Card
               key={state.selectedEmail.id}
               style={{
@@ -149,16 +143,11 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <div>
-                    <h3>From:{state.selectedEmail.from}</h3>
-                    <h4>Subject:{state.selectedEmail.subject}</h4>
+                    <h3>From: {state.selectedEmail.from}</h3>
+                    <h4>Subject: {state.selectedEmail.subject}</h4>
                     <h4>Message:</h4>
                     <p>{state.selectedEmail.message}</p>
                   </div>
-                  <Button
-                    onClick={() => handleDeleteEmail(state.selectedEmail.id)}
-                  >
-                    Delete
-                  </Button>
                 </div>
               </Card.Body>
             </Card>
@@ -169,18 +158,20 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
               Inbox {countUnreadMessages() > 0 && `(${countUnreadMessages()})`}
             </Button>
             <ul>
-              {state.emails.map((email) => (
+              {Database.map(({ key, value }) => (
                 <li
-                  key={email.id}
+                  key={key}
                   style={{
                     margin: "16px",
                     cursor: "pointer",
                     border: "1px solid blue",
                     borderRadius: "5px",
                     backgroundColor:
-                      state.selectedEmail === email ? "#f0f0f0" : "inherit",
+                      state.selectedEmail === value.email
+                        ? "#f0f0f0"
+                        : "inherit",
                   }}
-                  onClick={() => handleEmailClick(email)}
+                  onClick={() => handleEmailClick(key)}
                 >
                   <Card.Body>
                     <div
@@ -190,10 +181,16 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
                       }}
                     >
                       <div>
-                        {renderBlueDot(email)}
-                        <Card.Title>{email.subject}</Card.Title>
+                        {renderBlueDot(value)}
+                        <Card.Title>{value.subject}</Card.Title>
                       </div>
-                      <Button onClick={() => handleDeleteEmail(email.id)}>
+                      <Button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteEmail(key);
+                        }}
+                      >
                         Delete
                       </Button>
                     </div>
@@ -204,9 +201,7 @@ const Inbox = ({ userId, markEmailAsRead, deleteEmail }) => {
           </div>
         )}
       </div>
-      <div style={{ flex: "0", padding: "10px" }}>
-        {/* Display total number of unread messages */}
-      </div>
+      <div style={{ flex: "0", padding: "10px" }}></div>
     </div>
   );
 };

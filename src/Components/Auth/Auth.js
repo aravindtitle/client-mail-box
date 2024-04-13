@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import Logout from "./Logout";
 
 const Auth = ({ handleLogin }) => {
   const [SIGNUP, signUpHandler] = useState(false);
@@ -43,6 +42,12 @@ const Auth = ({ handleLogin }) => {
     localStorage.setItem("idToken", data.idToken);
     handleLogin(data.idToken);
   }
+
+  // Prevent default behavior of anchor tag
+  const handleLinkClick = (event) => {
+    event.preventDefault();
+    modeHandler();
+  };
 
   return (
     <Container
@@ -97,7 +102,7 @@ const Auth = ({ handleLogin }) => {
                 </Form.Group>
               )}
 
-              <Button variant="primary" type="submit" block>
+              <Button variant="primary" type="submit" block={true}>
                 {SIGNUP ? "Login" : "Sign Up"}
               </Button>
               <Button
@@ -112,7 +117,9 @@ const Auth = ({ handleLogin }) => {
             <div className="mt-3">
               <p className="text-center">
                 {SIGNUP ? "Already have an account?" : "Don't have an account?"}{" "}
-                <a href="/signup">{SIGNUP ? "Sign up here" : "Log in here"}</a>
+                <a href="/" onClick={handleLinkClick}>
+                  {SIGNUP ? "Sign up here" : "Log in here"}
+                </a>
               </p>
             </div>
           </div>
