@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import styles from "./ComposerPage.module.css";
+import styles from "./Composer-Page.module.css";
 const EmailComposer = () => {
   const email = useRef();
   const subject = useRef();

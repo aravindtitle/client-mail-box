@@ -1,6 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import inboxReducer from "./InboxReducer";
-import sentReducer from "./SentReducer";
+import inboxReducer from "./inbox-reducer";
+import sentReducer from "./sent-reducer";
 
 const rootReducer = combineReducers({
   inbox: inboxReducer,

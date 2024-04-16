@@ -1,8 +1,8 @@
 import React, { useReducer, useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
-import useFetch from "../Custom Hooks/CustomHook";
-import inboxReducer from "../Reducers/InboxReducer";
-import styles from "./InboxPage.module.css";
+import useFetch from "../custom-hooks/use-fetch";
+import inboxReducer from "../Reducers/inbox-reducer";
+import styles from "./Inbox-Page.module.css";
 
 const Inbox = () => {
   const {

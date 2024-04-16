@@ -1,8 +1,8 @@
 import React, { useReducer } from "react";
 import { Card, Button } from "react-bootstrap";
-import useFetch from "../Custom Hooks/CustomHook";
-import styles from "./SentPage.module.css";
-import sentReducer from "../Reducers/SentReducer";
+import useFetch from "../custom-hooks/use-fetch";
+import styles from "./Sent-Page.module.css";
+import sentReducer from "../Reducers/sent-reducer";
 
 const Sent = () => {
   const initialState = {

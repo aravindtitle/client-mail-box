@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 
-
-function useFetch(url, Comp) {
+const useFetch = (url, Comp) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data1, setData1] = useState(false);
   const UID = localStorage.getItem("UID");
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +50,6 @@ function useFetch(url, Comp) {
   }, [url, Comp, data1]); // Run once when component mounts
 
   return { data, loading, setData, setData1 };
-}
+};
 
 export default useFetch;

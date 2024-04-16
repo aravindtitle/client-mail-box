@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Home from "./Pages/HomePage";
+import Home from "./Pages/Home-Page";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("idToken"));

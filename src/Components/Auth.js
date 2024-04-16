@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Auth = ({ handleLogin }) => {
-  // Destructure handleLogin from props
   const [SIGNUP, setSignup] = useState(false);
   const Email = useRef();
   const Password = useRef();
@@ -44,7 +43,6 @@ const Auth = ({ handleLogin }) => {
     handleLogin(data.idToken);
   }
 
-  // Prevent default behavior of anchor tag
   const handleLinkClick = (event) => {
     event.preventDefault();
     modeHandler();
@@ -64,7 +62,7 @@ const Auth = ({ handleLogin }) => {
           <div
             className="p-4"
             style={{
-              marginTop: "-300px", // Adjust this value to control the box length
+              marginTop: "-300px", 
               borderWidth: "5px",
               padding: "100px",
               backgroundColor: "lightblue",
