@@ -2,24 +2,24 @@ import React, { useRef, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Auth = ({ handleLogin }) => {
-  const [SIGNUP, signUpHandler] = useState(false);
+  // Destructure handleLogin from props
+  const [SIGNUP, setSignup] = useState(false);
   const Email = useRef();
   const Password = useRef();
   const confirmPassword = useRef();
 
   const modeHandler = () => {
-    signUpHandler((value) => !value);
+    setSignup((value) => !value);
   };
 
   async function submitHandler(event) {
     event.preventDefault();
+
     let url;
     if (!SIGNUP) {
-      url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyATlRMmgZhx_d86BZAvGHprgCUO2Nxo6ck";
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyATlRMmgZhx_d86BZAvGHprgCUO2Nxo6ck`;
     } else {
-      url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyATlRMmgZhx_d86BZAvGHprgCUO2Nxo6ck";
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyATlRMmgZhx_d86BZAvGHprgCUO2Nxo6ck`;
     }
 
     const response = await fetch(url, {
@@ -37,6 +37,7 @@ const Auth = ({ handleLogin }) => {
     if (!response.ok) {
       throw new Error("Signup was not successful");
     }
+
     const data = await response.json();
     localStorage.setItem("UID", data.email);
     localStorage.setItem("idToken", data.idToken);

@@ -1,0 +1,52 @@
+.container {
+    display: flex;
+    background-color: rgb(174, 182, 196);
+    height: 1000px;
+    
+  }
+  
+  .emailList {
+    flex: 1;
+    padding: 10px;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+  }
+  
+  .emailItem {
+    margin: 16px;
+    cursor: pointer;
+  }
+  
+  .emailCard {
+    
+    background-color: #da8c33;
+    border-radius: 5px;
+    position: relative;
+    transition: background-color 0.3s ease;
+  }
+  
+  .emailCard:hover {
+    background-color: #aa4111;
+  }
+  
+  .emailBody {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .emailHeader {
+    display: flex;
+    align-items: center;
+  }
+  
+  .emailTitle {
+    margin-left: 10px;
+   
+  }
+  
+  .deleteButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+  

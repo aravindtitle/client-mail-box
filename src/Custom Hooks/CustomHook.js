@@ -1,4 +1,3 @@
-import { set } from "firebase/database";
 import { useState, useEffect } from "react";
 
 // Custom hook to fetch data from an API
@@ -16,13 +15,12 @@ function useFetch(url, Comp) {
         const response = await fetch(url);
 
         if (response.ok) {
-      
           let jsonData = await response.json();
-         
-          if(!jsonData){
-            jsonData=[];
+
+          if (!jsonData) {
+            jsonData = [];
           }
-          
+
           var arrayOfObjects = Object.keys(jsonData).map((key) => ({
             key: key,
             value: jsonData[key],
@@ -37,15 +35,12 @@ function useFetch(url, Comp) {
           }
 
           if (Comp === "Inbox") {
-            
-              setData(
-                Object.values(arrayOfObjects).filter(
-                  ({ value }) => value.To === UID
-                )
-              );
-
+            setData(
+              Object.values(arrayOfObjects).filter(
+                ({ value }) => value.To === UID
+              )
+            );
           }
-
         }
 
         setLoading(false);

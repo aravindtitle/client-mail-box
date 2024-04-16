@@ -1,8 +1,11 @@
 import React from "react";
+import "./Welcome.css";
 
 const Welcome = () => {
   return (
-    <div className=" p-2 text-center ">Welcome to the email box client</div>
+    <div className="welcome-container">
+      <h1>Gmail</h1>
+    </div>
   );
 };
 

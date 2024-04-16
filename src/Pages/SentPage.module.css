@@ -1,0 +1,27 @@
+.sentContainer {
+    padding: 10px;
+    background-color: #1f9bb1;
+    height: 800px;
+  }
+  
+  .sentCard {
+    margin-bottom: 10px;
+    background-color: hsl(244, 38%, 58%);
+  }
+  
+  .sentCardBody {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sentButton {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+  }
+  
+  .sentButton:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }

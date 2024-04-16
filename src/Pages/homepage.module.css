@@ -1,0 +1,43 @@
+
+
+.container {
+    display: flex;
+    margin-top: 30px;
+}
+
+.sidebar {
+    width: 200px;
+    padding: 20px;
+    background-color: hsla(0, 14%, 99%, 0.63);
+    border-right: 5px solid #ddd;
+}
+
+
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+    
+}
+
+.sidebar li a {
+    text-decoration: none;
+    color: #080cf7; /* Gmail blue for links */
+    font-weight: bold;
+}
+
+.sidebar li a.active {
+    color: #1a73e8;
+    background-color: #f1f8ff; /* Light blue background for active link */
+    border-radius: 5px;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+}

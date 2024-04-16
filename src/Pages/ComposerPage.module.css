@@ -1,0 +1,59 @@
+.compose-container {
+    background-color: #617258; /* Light grey background */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333; /* Dark grey color */
+}
+
+.form-control {
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 5px;
+}
+
+.form-control:focus {
+    border-color: #1a73e8; /* Gmail blue color when focused */
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.5); /* Light shadow when focused */
+}
+
+.textarea-control {
+    resize: none; /* Prevent resizing of textarea */
+}
+
+.button-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button-container button {
+    width: 100px;
+}
+
+.button-container button[type="submit"] {
+    background-color: #1a73e8; /* Gmail blue color for submit button */
+    color: #fff; /* White text color */
+    border: none;
+}
+
+.button-container button[type="submit"]:hover {
+    background-color: #0f5ac5; /* Darker blue color on hover */
+}
+
+.button-container button[type="cancel"] {
+    background-color: #ccc; /* Light grey color for cancel button */
+    color: #bb4f4f; /* Dark grey text color */
+}
+
+.button-container button[type="cancel"]:hover {
+    background-color: #bbb; /* Darker grey color on hover */
+}

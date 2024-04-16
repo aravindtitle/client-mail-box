@@ -1,13 +1,14 @@
 import React, { useReducer, useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
-import useFetch from "../../Useeffect/CustomHook";
-import inboxReducer from "../Store/InboxReducer";
+import useFetch from "../Custom Hooks/CustomHook";
+import inboxReducer from "../Reducers/InboxReducer";
+import styles from "./InboxPage.module.css";
 
 const Inbox = () => {
   const {
     data: Database,
     loading,
-    setData: setDataBase,
+
     setData1,
   } = useFetch(
     "https://login-94bb8-default-rtdb.firebaseio.com/email.json",
@@ -99,7 +100,9 @@ const Inbox = () => {
   };
 
   const renderBlueDot = (email) => {
-    return email.read ? null : <span style={{ color: "blue" }}>&#8226;</span>;
+    return email.read ? null : (
+      <span className={styles.unreadDot}>&#8226;</span>
+    );
   };
 
   const countUnreadMessages = () => {
@@ -118,35 +121,21 @@ const Inbox = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <div
-        style={{
-          flex: "1",
-          padding: "10px",
-          maxHeight: "calc(100vh - 20px)",
-          overflowY: "auto",
-        }}
-      >
+    <div className={styles.container}>
+      <div className={styles.emailList}>
         {state.selectedEmail ? (
           <div>
             <Button onClick={handleGoBack}>Go Back</Button>
-            <Card
-              key={state.selectedEmail.id}
-              style={{
-                margin: "16px",
-                border: "1px solid blue",
-                borderRadius: "5px",
-              }}
-            >
+            <Card key={state.selectedEmail.id} className={styles.emailDetails}>
               <Card.Body>
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
+                <div className={styles.emailHeader}>
                   <div>
                     <h3>From: {state.selectedEmail.from}</h3>
                     <h4>Subject: {state.selectedEmail.subject}</h4>
                     <h4>Message:</h4>
-                    <p>{state.selectedEmail.message}</p>
+                    <p className={styles.emailContent}>
+                      {state.selectedEmail.message}
+                    </p>
                   </div>
                 </div>
               </Card.Body>
@@ -161,47 +150,37 @@ const Inbox = () => {
               {Database.map(({ key, value }) => (
                 <li
                   key={key}
-                  style={{
-                    margin: "16px",
-                    cursor: "pointer",
-                    border: "1px solid blue",
-                    borderRadius: "5px",
-                    backgroundColor:
-                      state.selectedEmail === value.email
-                        ? "#f0f0f0"
-                        : "inherit",
-                  }}
+                  className={styles.emailItem}
                   onClick={() => handleEmailClick(key)}
                 >
-                  <Card.Body>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div>
-                        {renderBlueDot(value)}
-                        <Card.Title>{value.subject}</Card.Title>
+                  <Card className={styles.emailCard}>
+                    <Card.Body className={styles.emailBody}>
+                      <div className={styles.emailHeader}>
+                        <div>
+                          {renderBlueDot(value)}
+                          <Card.Title className={styles.emailTitle}>
+                            {value.subject}
+                          </Card.Title>
+                        </div>
+                        <Button
+                          className={styles.deleteButton}
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteEmail(key);
+                          }}
+                        >
+                          Delete
+                        </Button>
                       </div>
-                      <Button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteEmail(key);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </Card.Body>
+                    </Card.Body>
+                  </Card>
                 </li>
               ))}
             </ul>
           </div>
         )}
       </div>
-      <div style={{ flex: "0", padding: "10px" }}></div>
     </div>
   );
 };

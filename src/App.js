@@ -1,13 +1,24 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Home from "./Components/Pages/Home";
+import React, { useState } from "react";
 
-const App = () => {
+import Home from "./Pages/HomePage";
+
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("idToken"));
+
+  const handleLogin = (idToken) => {
+    setIsLoggedIn(idToken);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("idToken");
+    setIsLoggedIn(null);
+  };
+
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-    </Routes>
+    <div>
+      <Home />
+    </div>
   );
-};
+}
 
 export default App;
