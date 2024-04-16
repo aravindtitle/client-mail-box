@@ -1,10 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "@reduxjs/toolkit";
 import inboxReducer from "./InboxReducer";
+import sentReducer from "./SentReducer";
 
-const store = configureStore({
-  reducer: {
-    inbox: inboxReducer,
-  },
+const rootReducer = combineReducers({
+  inbox: inboxReducer,
+  sent: sentReducer
 });
 
-export default store;
+export default rootReducer;

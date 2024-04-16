@@ -22,7 +22,7 @@ const Home = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#f4f4f4", minHeight: "100vh" }}>
+    <div>
       <Container fluid className="py-4">
         <Row className="justify-content-center">
           <Col md={8}>

@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 
-// Custom hook to fetch data from an API
-//this custom hook re-render again
+
 function useFetch(url, Comp) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data1, setData1] = useState(false);
   const UID = localStorage.getItem("UID");
-  // window.alert("this one is use fetch custom hook");
+  
 
   useEffect(() => {
     const fetchData = async () => {

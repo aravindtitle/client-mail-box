@@ -5,7 +5,12 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "./Reducers/rootReducer";
+import { configureStore } from "@reduxjs/toolkit";
+import rootReducer from "./Reducers/rootReducer";
+
+const store = configureStore({
+  reducer: rootReducer,
+});
 
 const root = createRoot(document.getElementById("root"));
 

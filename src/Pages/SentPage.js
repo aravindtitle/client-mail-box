@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import { Card, Button } from "react-bootstrap";
 import useFetch from "../Custom Hooks/CustomHook";
 import styles from "./SentPage.module.css";
+import sentReducer from "../Reducers/SentReducer";
 
 const Sent = () => {
-  const [selectedMessage, setSelectedMessage] = useState(null);
+  const initialState = {
+    selectedMessage: null,
+  };
+
+  const [state, dispatch] = useReducer(sentReducer, initialState);
+
   const { data } = useFetch(
     "https://login-94bb8-default-rtdb.firebaseio.com/email.json",
     "Sent"
@@ -21,20 +27,20 @@ const Sent = () => {
   };
 
   const handleViewDetails = (message) => {
-    setSelectedMessage(message);
+    dispatch({ type: "SELECT_MESSAGE", payload: message });
   };
 
   const handleCloseDetails = () => {
-    setSelectedMessage(null);
+    dispatch({ type: "CLOSE_DETAILS" });
   };
 
   return (
     <div className={styles.sentContainer}>
       <h2>Sent Messages</h2>
-      {selectedMessage ? (
+      {state.selectedMessage ? (
         <div>
           <Button onClick={handleCloseDetails}>Close Details</Button>
-          {renderMessageDetails(selectedMessage)}
+          {renderMessageDetails(state.selectedMessage)}
         </div>
       ) : (
         data.map((message) => (
