@@ -1,5 +1,4 @@
-import firebase from "firebase/compat/app"; // Import only the necessary Firebase modules
-import "firebase/compat/auth";
+import firebase from "firebase/compat/app"; 
 
 const firebaseConfig = {
   apiKey: "AIzaSyATlRMmgZhx_d86BZAvGHprgCUO2Nxo6ck",
@@ -12,7 +11,7 @@ const firebaseConfig = {
   measurementId: "G-RHWS9Z0GTD",
 };
 
-// Check if Firebase is already initialized to prevent re-initialization
+
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }

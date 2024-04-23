@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import styles from "./Composer-Page.module.css";
+import styles from "./composer-page.module.css";
 const EmailComposer = () => {
   const email = useRef();
   const subject = useRef();
@@ -52,6 +52,7 @@ const EmailComposer = () => {
             placeholder="Enter email"
             ref={email}
             required
+            className={styles["form-control"]}
           />
         </Form.Group>
         <Form.Group controlId="formSubject" className={styles["form-group"]}>

@@ -30,7 +30,7 @@
 }
 
 .emailCard:hover {
-  background-color: #aa4111;
+  background-color: #d36b3f;
 }
 
 .emailBody {
@@ -53,6 +53,7 @@
 
 .deleteButton {
   position: absolute;
+  color: red;
   top: 32px;
   right: 5px;
   

@@ -13,7 +13,7 @@
   .sentCardBody {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    
     padding-bottom: 30px;
   }
   
@@ -25,5 +25,5 @@
   
   .sentButton:hover {
     background-color: #0056b3;
-    border-color: #0056b3;
+    border-color: #f3efef;
   }

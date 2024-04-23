@@ -1,26 +1,29 @@
 .compose-container {
-    background-color: #617258;
+    background-color: #757773;
     border-radius: 10px;
-    padding: 20px;
+    padding: 50px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
     margin-bottom: 20px;
+    
+    
 }
 
 .form-label {
-    font-weight: bold;
-    color: #333; 
+    font-weight:bold;
+    color: #0a0a0a; 
+    
 }
 
 .form-control {
-    border: 1px solid #ccc; 
+    border: 1px solid hsl(0, 5%, 92%); 
     border-radius: 5px;
 }
 
 .form-control:focus {
-    border-color: #1a73e8; 
+    border-color: #36393b; 
     box-shadow: 0 0 5px rgba(26, 115, 232, 0.5); 
 }
 
@@ -40,20 +43,13 @@
 }
 
 .button-container button[type="submit"] {
-    background-color: #1a73e8; 
+    background-color: #1871e6; 
     color: #fff;
     border: none;
+    border-radius: 5px ;
 }
 
 .button-container button[type="submit"]:hover {
-    background-color: #0f5ac5; 
+    background-color: #d33e24; 
 }
 
-.button-container button[type="cancel"] {
-    background-color: #ccc; 
-    color: #bb4f4f; 
-}
-
-.button-container button[type="cancel"]:hover {
-    background-color: #bbb;
-}

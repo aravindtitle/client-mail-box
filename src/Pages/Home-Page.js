@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Welcome from "../Components/Welcome";
-import EmailComposer from "./Composer-Page";
-import Logout from "../Components/Logout";
-import Inbox from "./Inbox-Page";
-import Auth from "../Components/Auth";
-import Sent from "./Sent-Page";
+import Welcome from "../components/Welcome";
+import EmailComposer from "./composer-page";
+import Logout from "../components/Logout";
+import Inbox from "./inbox-page";
+import Auth from "../components/Auth";
+import Sent from "./sent-page";
 import styles from "./home-page.module.css";
 
 const Home = () => {
